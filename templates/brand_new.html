@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" version="XHTML+RDFa 1.0" dir="ltr" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:og="http://ogp.me/ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:sioc="http://rdfs.org/sioc/ns#" xmlns:sioct="http://rdfs.org/sioc/types#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#"><head profile="http://www.w3.org/1999/xhtml/vocab">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" href="http://www.southampton.ac.uk/sites/all/themes/southampton2/favicon.ico" type="image/vnd.microsoft.icon" />
+<title><check if="{{ @page_title=='' }}">
+<false>
+{{ @page_title }} |
+</false>
+</check>Open Data Service | University of Southampton</title>
+<link rel="stylesheet" type="text/css" href="/css/brand.css" media="all" />
+<link rel="stylesheet" type="text/css" href="/css/datasoton.css" media="all" />
+</head>
+
+<body>
+
+	<div id="accessbar">
+		<ul>
+			<li><a href="/sitemap" target="" title="">Site map</a></li>
+			<li class="last"><a href="javascript:(function(){d=document;lf=d.createElement('script');lf.type='text/javascript';lf.id='ToolbarStarter';lf.text='var%20StudyBarNoSandbox=true';d.getElementsByTagName('head')[0].appendChild(lf);jf=d.createElement('script');jf.src='http://access.ecs.soton.ac.uk/ToolBar/channels/toolbar-stable/JTToolbar.user.js';jf.type='text/javascript';jf.id='ToolBar';d.getElementsByTagName('head')[0].appendChild(jf);})();" target="" title="">Accessibility Tools</a></li>
+		</ul>
+	</div>
+
+	<div id="sitetitle"><h1>Open Data Service, University of Southampton</h1></div>
+
+	<div id="pagetitle"><h2>Open Data Service</h2></div>
+
+	<div id="maincontent">
+
+	<div id="pagemenu">
+<ul>
+<li id="searchbox">
+<form action="/search.html" method="get">
+<fieldset>
+<input class="text" id="searchtext" name="term" onfocus="if(this.value==this.defaultValue)this.value=''" value="Search" type="text" />
+<button class="submit" type="submit" name="submit">Submit</button>
+<span id="searchrad">
+<label for="searchhere" title="search only this site">This site</label>
+<input id="searchhere" checked="checked" name="s" title="search only the this site" value="This site" type="radio" />
+<label for="searchthere" title="search all University of Southampton sites">University</label>
+<input id="searchthere" value="All" name="s" title="search all University of Southampton sites" type="radio" />
+</span>
+</fieldset>
+</form>
+</li>
+<li class="home"><a href="/">Home</a></li>
+<li class="pages" id="main-menu">
+
+<include href="{{ @menu_file }}" />
+
+</li>
+<li class="sotonhome"><a href="http://www.southampton.ac.uk/" title="University of Southampton home page">University Home</a></li>
+</ul>
+	</div>
+
+
+	<div id="pagecontent">
+
+<check if="{{ @page_title=='' }}">
+	<false><h2>{{ @page_title }}</h2></false>
+</check>
+
+
+{{ @page_content | raw }}
+
+	</div>
+
+	</div>
+
+</body>
+</html>
