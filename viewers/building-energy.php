@@ -14,3 +14,8 @@ if( $building->has( "soton:electricityTimeSeries" ) )
 	print "</div>";
 	print "<p>Click and drag graph to zoom. Double click to zoom back out.</p>";
 }
+
+else
+{
+	print("<p>We're sorry, but we don't have any energy usage data for this building at the present time.</p>");
+}

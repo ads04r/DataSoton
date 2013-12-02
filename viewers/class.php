@@ -8,8 +8,16 @@ $graph->ns( "geo","http://www.w3.org/2003/01/geo/wgs84_pos#" );
 $graph->ns( "dct","http://purl.org/dc/terms/" );
 $graph->ns( "event","http://purl.org/NET/c4dm/event.owl#" );
 $graph->ns( "tl","http://purl.org/NET/c4dm/timeline.owl#" );
-$building = $graph->resource( $uri );
-$rdesc = $building->prepareDescription();
+$graph->ns( "oo","http://purl.org/openorg/" );
+$res = $graph->resource( $uri );
+
+$superclass = "";
+if($res->has("http://www.w3.org/2000/01/rdf-schema#subClassOf"))
+{
+	$superclass = "" . $res->get("http://www.w3.org/2000/01/rdf-schema#subClassOf");
+}
+
+$rdesc = $res->prepareDescription();
 $rdesc->addRoute( "*" );
 $rdesc->addRoute( "*/rdf:type" );
 $rdesc->addRoute( "*/rdfs:label" );
@@ -27,6 +35,13 @@ $rdesc->addRoute( "-sr:within/geo:long" );
 $rdesc->addRoute( "*/geo:lat" );
 $rdesc->addRoute( "*/geo:lon" );
 $rdesc->addRoute( "event:time/*" );
+
+if(strcmp($superclass, "http://purl.org/openorg/Feature") == 0)
+{
+	$rdesc->addRoute("-rdf:type/-oo:hasFeature/*");
+	$rdesc->addRoute("-rdf:type/-oo:hasFeature/sr:within/*");
+}
+
 $n = $rdesc->loadSPARQL( $endpoint );
 
 if( $format == "sparql" )
@@ -44,4 +59,11 @@ if( $format != "html" )
 
 print("<p>" . $uri . "</p>");
 
-$rdesc->handleFormat("rdf.html");
+if(strcmp($superclass, "http://purl.org/openorg/Feature") == 0)
+{
+	include("./viewers/class-feature.php");
+}
+else
+{
+	$rdesc->handleFormat("rdf.html");
+}

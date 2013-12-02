@@ -9,12 +9,14 @@ $graph->ns( "dct","http://purl.org/dc/terms/" );
 $graph->ns( "dcat", "http://www.w3.org/ns/dcat#" );
 $graph->ns( "oo", "http://purl.org/openorg/" );
 $graph->ns( "prov", "http://www.w3.org/ns/prov#" );
+$graph->ns( "void", "http://rdfs.org/ns/void#" );
 $building = $graph->resource( $uri );
 $rdesc = $building->prepareDescription();
 
 $rdesc->addRoute( "*" );
 $rdesc->addRoute( "*/rdf:type" );
 $rdesc->addRoute( "*/rdfs:label" );
+$rdesc->addRoute( "*/void:triples" );
 $rdesc->addRoute( "*/dct:format" );
 $rdesc->addRoute( "-*/dct:requires/*" );
 $rdesc->addRoute( "-*/rdf:type/*" );
@@ -103,6 +105,12 @@ if($item->has("rdf:type"))
 {
 	print("<tr><td>Type:</td><td>");
 	print($item->all("rdf:type")->prettyLink()->join("<br>"));
+	print("</td></tr>");
+}
+if($item->has("http://rdfs.org/ns/void#triples"))
+{
+	print("<tr><td>Triples:</td><td>");
+	print($item->get("http://rdfs.org/ns/void#triples") . "");
 	print("</td></tr>");
 }
 if($item->has("dct:license"))

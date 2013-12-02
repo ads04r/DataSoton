@@ -50,6 +50,8 @@ $rdesc->addRoute( "-sr:within/geo:long" );
 $rdesc->addRoute( "*/geo:lat" );
 $rdesc->addRoute( "*/geo:long" );
 $rdesc->addRoute( "event:time/*" );
+$rdesc->addRoute( "-gr:hasPOS" );
+$rdesc->addRoute( "-gr:hasPOS/*" );
 $rdesc->addRoute( "gr:hasOpeningHoursSpecification/*" );
 $rdesc->addRoute( "gr:hasOpeningHoursSpecification/*/rdfs:label" );
 $rdesc->addRoute( "-gr:availableAtOrFrom/*" );
@@ -110,6 +112,7 @@ if($item->has("http://purl.org/goodrelations/v1#hasOpeningHoursSpecification"))
 	}
 }
 
+
 if($item->has("-http://purl.org/goodrelations/v1#availableAtOrFrom"))
 {
 	$offerings = array();
@@ -138,6 +141,11 @@ print("</div>");
 if($item->has("http://purl.org/dc/terms/description"))
 {
 	print($item->get("http://purl.org/dc/terms/description"));
+}
+
+if($item->has("-http://purl.org/goodrelations/v1#hasPOS"))
+{
+	print("<p>Run by: " . $item->get("-http://purl.org/goodrelations/v1#hasPOS")->prettyLink() . "</p>");
 }
 
 if(($item->has("http://id.southampton.ac.uk/ns/workstationFreeSeats")) & ($item->has("http://id.southampton.ac.uk/ns/workstationSeats")))

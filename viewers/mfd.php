@@ -88,49 +88,6 @@ foreach($item->all("http://data.ordnancesurvey.co.uk/ontology/spatialrelations/w
 	}
 }
 
-if($item->has("http://purl.org/goodrelations/v1#hasOpeningHoursSpecification"))
-{
-	$opening_hours = array();
-	$dt = time();
-	foreach($item->all("http://purl.org/goodrelations/v1#hasOpeningHoursSpecification") as $time)
-	{
-		$dts = strtotime("" . $time->get("http://purl.org/goodrelations/v1#validFrom"));
-		$dte = strtotime("" . $time->get("http://purl.org/goodrelations/v1#validThrough"));
-		if(($dt < $dts) | ($dt > $dte))
-		{
-			continue;
-		}
-		$day = preg_replace("/(.*)#([^#]+)/", "$2", $time->get("http://purl.org/goodrelations/v1#hasOpeningHoursDayOfWeek")->toString());
-		$opening_hours[] = $day . "</td><td>" . preg_replace("/([0-9]+):([0-9]+)(.*)/", "$1:$2", $time->get("http://purl.org/goodrelations/v1#opens")) . "</td><td>-</td><td>" . preg_replace("/([0-9]+):([0-9]+)(.*)/", "$1:$2", $time->get("http://purl.org/goodrelations/v1#closes"));
-	}
-	if(count($opening_hours) > 0)
-	{
-		usort($opening_hours, "weekday_sort");
-		print("<h3>Opening Hours</h3><table><tr><td>" . implode("</td></tr><tr><td>", $opening_hours) . "</td></tr></table>");
-	}
-}
-
-if($item->has("-http://purl.org/goodrelations/v1#availableAtOrFrom"))
-{
-	$offerings = array();
-	foreach($item->all("-http://purl.org/goodrelations/v1#availableAtOrFrom") as $offering)
-	{
-		if((!($offering->isType("http://purl.org/goodrelations/v1#Offering"))) | ($offering->has("http://purl.org/openorg/priceListSection")) | ($offering->has("http://purl.org/goodrelations/v1#hasPriceSpecification")))
-		{
-			continue;
-		}
-		$offerings[] = $offering->get("http://purl.org/goodrelations/v1#includes")->prettyLink();
-	}
-
-	if(count($offerings) > 0)
-	{
-		print("<h3>Available Here</h3>");
-		print("<table><tr><td>");
-		print(implode("</td></tr><tr><td>", $offerings));
-		print("</td></tr></table>");
-	}
-}
-
 print("</div>");
 
 // ## MAIN CONTENT ##
@@ -139,48 +96,29 @@ if($item->has("http://purl.org/dc/terms/description"))
 {
 	print($item->get("http://purl.org/dc/terms/description"));
 }
-
-if(($item->has("http://id.southampton.ac.uk/ns/workstationFreeSeats")) & ($item->has("http://id.southampton.ac.uk/ns/workstationSeats")))
+else
 {
-	$free = (int) $item->get("http://id.southampton.ac.uk/ns/workstationFreeSeats")->toString();
-	$total = (int) $item->get("http://id.southampton.ac.uk/ns/workstationSeats")->toString();
-	print("<div>");
-	print("<p>This cluster currently has " . $free . " of " . $total . " workstations available for use.</p>");
-	print("</div>");
+	print("<p>This is a multi-function device, provided by iSolutions, as part of the managed print service. The managed print service provides printing, copying and scanning services to members of the University.</p>");
 }
 
-// ## ADDITIONAL CONTENT ##
-
-if($item->has("http://purl.org/openorg/ukfhrsRatingValue"))
+if($item->has("http://data.ordnancesurvey.co.uk/ontology/spatialrelations/within"))
 {
-	print("<hr>");
+	print("<h3>Device Location</h3><table>");
+	foreach($item->all("http://data.ordnancesurvey.co.uk/ontology/spatialrelations/within") as $loc)
+	{
+		print("<tr><td>" . $loc->prettyLink() . "</td></tr>");
+	}
+	print("</table>");
+}
 
-	$rating = (int) $item->get("http://purl.org/openorg/ukfhrsRatingValue")->toString();
-	$rating_date = 0;
-	$rating_page = "";
-	if($item->has("http://purl.org/openorg/ukfhrsRatingDate"))
+if($item->has("-http://purl.org/goodrelations/v1#availableAtOrFrom"))
+{
+	print("<h3>Functions Available</h3><table>");
+	foreach($item->all("-http://purl.org/goodrelations/v1#availableAtOrFrom") as $feature)
 	{
-		$rating_date = strtotime($item->get("http://purl.org/openorg/ukfhrsRatingDate") . " 12:00:00 GMT");
+		print("<tr><td>" . $feature->get("http://purl.org/goodrelations/v1#includes")->prettyLink() . "</td></tr>");
 	}
-	if($item->has("http://purl.org/openorg/ukfhrsPage"))
-	{
-		$rating_page = $item->get("http://purl.org/openorg/ukfhrsPage");
-	}
-	print("<div>");
-	if(strlen($rating_page) > 0)
-	{
-		print("<a href=\"" . $rating_page . "\">");
-	}
-	print("<img src=\"http://data.southampton.ac.uk/resources/images/fhrs/small/72ppi/fhrs_" . $rating . "_en-gb.jpg\" width=\"120\" height=\"61\" border=\"0\" alt=\"FHRS Rating " . $rating . "\">");
-	if(strlen($rating_page) > 0)
-	{
-		print("</a>");
-	}
-	if($rating_date > 0)
-	{
-		print("<br>Inspected: " . date("jS M Y", $rating_date));
-	}
-	print("</div>");
+	print("</table>");
 }
 
 $rdesc->handleFormat("rdf.html");
