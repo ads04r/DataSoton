@@ -24,6 +24,15 @@ function thingsort($a, $b)
 	@$loca = $a['location'];
 	@$locb = $b['location'];
 
+	if((strlen($buildinga) == 0) & (strlen($buildingb) > 0))
+	{
+		return 1;
+	}
+	if((strlen($buildinga) > 0) & (strlen($buildingb) == 0))
+	{
+		return -1;
+	}
+
 	$building = strcmp($buildinga, $buildingb);
 	if($building != 0)
 	{
@@ -150,7 +159,14 @@ foreach($res as $item)
 	if(strcmp($building, $lastbuilding) != 0)
 	{
 		print("</table>");
-		print("<h3>" . $building . "</h3>");
+		if(strlen($building) == 0)
+		{
+			print("<h3>Other places</h3>");
+		}
+		else
+		{
+			print("<h3>" . $building . "</h3>");
+		}
 		print("<table class=\"datasotonacuk_searchresults\">");
 	}
 	$lastbuilding = $building;
