@@ -64,7 +64,7 @@ if( $format != "html" )
         exit();
 }
 
-print("<p>" . $uri . "</p>");
+print(renderUri($uri));
 
 $type = "";
 print("<div class=\"datasotonacuk_tabs\">");

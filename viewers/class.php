@@ -57,7 +57,7 @@ if( $format != "html" )
         exit();
 }
 
-print("<p>" . $uri . "</p>");
+print(renderUri($uri));
 
 if(strcmp($superclass, "http://purl.org/openorg/Feature") == 0)
 {

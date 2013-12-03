@@ -42,6 +42,6 @@ if( $format != "html" )
         exit();
 }
 
-print("<p>" . $uri . "</p>");
+print(renderUri($uri));
 
 $rdesc->handleFormat("rdf.html");

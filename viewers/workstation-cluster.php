@@ -69,7 +69,7 @@ if( $format != "html" )
         exit();
 }
 
-print("<p>" . $uri . "</p>");
+print(renderUri($uri));
 
 $rdf = $rdesc->toGraph();
 $item = $rdf->resource($uri);

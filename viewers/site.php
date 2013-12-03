@@ -77,7 +77,7 @@ if( $format != "html" )
         exit();
 }
 
-print("<p>" . $uri . "</p>");
+print(renderUri($uri));
 
 $kml_url = "http://data.southampton.ac.uk/" . preg_replace("|^(.+)//([^/]+)/(.*)$|", "$3", $uri) . ".kml";
 print("<iframe class=\"widemap\" border=\"none\" scrolling=\"none\" src=\"http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=" . urlencode($kml_url) . "&aq=&output=embed&t=k\"></iframe>");
