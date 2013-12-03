@@ -132,6 +132,7 @@ if($item->has("-http://purl.org/goodrelations/v1#availableAtOrFrom"))
 		print("<tr><td>" . $feature->get("http://purl.org/goodrelations/v1#includes")->prettyLink() . "</td></tr>");
 	}
 	print("</table>");
+	print("<p>Please be aware that the listed capabilities are for this particular model of printer, other devices on campus will vary in functionality.</p>");
 }
 
 print("<h2>Managed Print Information</h2>");
