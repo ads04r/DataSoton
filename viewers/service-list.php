@@ -33,7 +33,7 @@ function thingsort($a, $b)
 		return -1;
 	}
 
-	$building = strcmp($buildinga, $buildingb);
+	$building = strnatcmp($buildinga, $buildingb);
 	if($building != 0)
 	{
 		return $building;
