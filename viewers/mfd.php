@@ -54,6 +54,8 @@ $rdesc->addRoute( "gr:hasOpeningHoursSpecification/*" );
 $rdesc->addRoute( "gr:hasOpeningHoursSpecification/*/rdfs:label" );
 $rdesc->addRoute( "-gr:availableAtOrFrom/*" );
 $rdesc->addRoute( "-gr:availableAtOrFrom/gr:includes/*" );
+$rdesc->addRoute( "gr:hasMakeAndModel/*" );
+$rdesc->addRoute( "gr:hasMakeAndModel/gr:hasManufacturer/*" );
 $n = $rdesc->loadSPARQL( $endpoint );
 
 if( $format == "sparql" )
@@ -101,6 +103,17 @@ else
 	print("<p>This is a multi-function device, provided by iSolutions, as part of the managed print service. The managed print service provides printing, copying and scanning services to members of the University.</p>");
 }
 
+print("<table>");
+if($item->has("http://purl.org/goodrelations/v1#hasMakeAndModel"))
+{
+	print("<tr><td>Model:</td><td>" . $item->get("http://purl.org/goodrelations/v1#hasMakeAndModel")->label() . "</td></tr>");
+}
+if($item->has("http://purl.org/goodrelations/v1#hasManufacturer"))
+{
+	print("<tr><td>Manufacturer:</td><td>" . $item->get("http://purl.org/goodrelations/v1#hasManufacturer")->label() . "</td></tr>");
+}
+print("</table>");
+
 if($item->has("http://data.ordnancesurvey.co.uk/ontology/spatialrelations/within"))
 {
 	print("<h3>Device Location</h3><table>");
@@ -121,4 +134,23 @@ if($item->has("-http://purl.org/goodrelations/v1#availableAtOrFrom"))
 	print("</table>");
 }
 
-$rdesc->handleFormat("rdf.html");
+print("<h2>Managed Print Information</h2>");
+
+print("<p>The University has dozens of printers all over its campuses, and all are linked to the same network. This means you can print a document from your desktop, an iSolutions workstation or your laptop or mobile device and collect it from any printer in the University.</p>");
+print("<p>In order to use this system you need to make sure a compatible printer app or driver is installed on your devices, and (optionally) register your ID card on the printer system. Below are some links that will help you do this.</p>");
+
+print("<p><a href=\"https://www.secureapps.soton.ac.uk/PublicProxy/files.aspx?f=https://intranet.soton.ac.uk/sites/iSolutions/user-services/How%20to/How%20to%20register%20your%20University%20card%20for%20printing.pdf\">Card Registration Guide</a> [PDF]</p>");
+print("<p><a href=\"https://www.secureapps.soton.ac.uk/PublicProxy/files.aspx?f=https://intranet.soton.ac.uk/sites/iSolutions/user-services/How%20to/Printing%20guide.pdf\">Printing Guide</a> [PDF]</p>");
+print("<p><a href=\"http://www.southampton.ac.uk/isolutions/services/printing_on_managed_mfd/how_do_i.php\">Managed Print \"How Do I..?\" page</a></p>");
+
+if($item->has("http://purl.org/goodrelations/v1#hasMakeAndModel"))
+{
+	if($item->get("http://purl.org/goodrelations/v1#hasMakeAndModel")->has("foaf:homepage"))
+	{
+		print("<p><a href=\"" . $item->get("http://purl.org/goodrelations/v1#hasMakeAndModel")->get("foaf:homepage") . "\">" . $item->get("http://purl.org/goodrelations/v1#hasMakeAndModel")->label() . " product page</a> (external website)</p>");
+	}
+}
+
+print("<h3>Printing FAQs</h3>");
+print("<p><a href=\"http://www.southampton.ac.uk/isolutions/services/follow_me_print_for_students/faq.php\">For Students</a></p>");
+print("<p><a href=\"http://www.southampton.ac.uk/isolutions/services/follow_me_print_for_staff/faq.php\">For Staff</a></p>");
