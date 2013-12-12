@@ -31,6 +31,7 @@ $graph->ns( "geo","http://www.w3.org/2003/01/geo/wgs84_pos#" );
 $graph->ns( "dct","http://purl.org/dc/terms/" );
 $graph->ns( "event","http://purl.org/NET/c4dm/event.owl#" );
 $graph->ns( "tl","http://purl.org/NET/c4dm/timeline.owl#" );
+$graph->ns( "oo","http://purl.org/openorg/" );
 $entity = $graph->resource( $uri );
 $rdesc = $entity->prepareDescription();
 $rdesc->addRoute( "*" );
@@ -56,6 +57,7 @@ $rdesc->addRoute( "gr:hasOpeningHoursSpecification/*" );
 $rdesc->addRoute( "gr:hasOpeningHoursSpecification/*/rdfs:label" );
 $rdesc->addRoute( "-gr:availableAtOrFrom/*" );
 $rdesc->addRoute( "-gr:availableAtOrFrom/gr:includes/*" );
+$rdesc->addRoute( "-gr:availableAtOrFrom/oo:priceListSection/*" );
 $n = $rdesc->loadSPARQL( $endpoint );
 
 if( $format == "sparql" )
@@ -103,7 +105,14 @@ if($item->has("http://purl.org/goodrelations/v1#hasOpeningHoursSpecification"))
 			continue;
 		}
 		$day = preg_replace("/(.*)#([^#]+)/", "$2", $time->get("http://purl.org/goodrelations/v1#hasOpeningHoursDayOfWeek")->toString());
-		$opening_hours[] = $day . "</td><td>" . preg_replace("/([0-9]+):([0-9]+)(.*)/", "$1:$2", $time->get("http://purl.org/goodrelations/v1#opens")) . "</td><td>-</td><td>" . preg_replace("/([0-9]+):([0-9]+)(.*)/", "$1:$2", $time->get("http://purl.org/goodrelations/v1#closes"));
+		$opentime = preg_replace("/([0-9]+):([0-9]+)(.*)/", "$1:$2", $time->get("http://purl.org/goodrelations/v1#opens"));
+		$closetime = preg_replace("/([0-9]+):([0-9]+)(.*)/", "$1:$2", $time->get("http://purl.org/goodrelations/v1#closes"));
+		if((strlen($opentime) == 0) | (strlen($closetime) == 0) | (strcmp($opentime, "[NULL]") == 0) | (strcmp($closetime, "[NULL]") == 0))
+		{
+			$opening_hours[] = $day . "</td><td colspan=\"2\">CLOSED";
+		} else {
+			$opening_hours[] = $day . "</td><td>" . $opentime . "</td><td>-</td><td>" . $closetime;
+		}
 	}
 	if(count($opening_hours) > 0)
 	{

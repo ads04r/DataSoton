@@ -96,28 +96,28 @@ foreach($item->all("-http://purl.org/goodrelations/v1#includes") as $posp)
 	}
 	$pos = $posp->get("http://purl.org/goodrelations/v1#availableAtOrFrom");
 	$item = array();
-	$item['title'] = $pos->label();
+	$item['title'] = "" . $pos->label();
 	$item['uri'] = "" . $pos;
 	foreach($pos->all("http://data.ordnancesurvey.co.uk/ontology/spatialrelations/within") as $loc)
 	{
 		if($loc->isType("http://vocab.deri.ie/rooms#Site"))
 		{
 			$site = array();
-			$site['title'] = $loc->label();
+			$site['title'] = "" . $loc->label();
 			$site['uri'] = "" . $loc;
-			$item['site'] = $building;
+			$item['site'] = $site;
 		}
 		if($loc->isType("http://vocab.deri.ie/rooms#Building"))
 		{
 			$building = array();
-			$building['title'] = $loc->label();
+			$building['title'] = "" . $loc->label();
 			$building['uri'] = "" . $loc;
 			$item['building'] = $building;
 		}
 		elseif($loc->isType("http://vocab.deri.ie/rooms#Room"))
 		{
 			$room = array();
-			$room['title'] = $loc->label();
+			$room['title'] = "" . $loc->label();
 			$room['uri'] = "" . $loc;
 			$item['room'] = $room;
 		}
@@ -137,6 +137,17 @@ foreach($item->all("-http://purl.org/goodrelations/v1#includes") as $posp)
 	if($pos->has("oo:mapIcon"))
 	{
 		$item['icon'] = "" . $pos->get("oo:mapIcon");
+	}
+	if(!(array_key_exists("location", $item)))
+	{
+		if(array_key_exists("building", $item))
+		{
+			$item['location'] = $item['building']['uri'];
+		}
+		elseif(array_key_exists("site", $item))
+		{
+			$item['location'] = $item['site']['uri'];
+		}
 	}
 	if(strcmp($item['title'], "[NULL]") != 0)
 	{

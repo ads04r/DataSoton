@@ -35,6 +35,9 @@ $rdesc = $site->prepareDescription();
 
 if(strcmp($query, "") == 0)
 {
+	$rdesc->addRoute( "*" );
+	$rdesc->addRoute( "*/rdf:type" );
+	$rdesc->addRoute( "*/rdfs:label" );
 	$rdesc->addRoute( "-sr:within/rdf:type" );
 	$rdesc->addRoute( "-sr:within/rdfs:label" );
 	$rdesc->addRoute( "-sr:within/skos:notation" );
